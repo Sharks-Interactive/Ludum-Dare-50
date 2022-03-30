@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sharks Interactive | Durus</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+  <body class="light">
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas"></canvas>
+    </div>
+    <div class="selectionCover">
+      <div id="shark-logo"><img src="logo.png"></div>
+      <div id="selection-text"></div>
+      <div id="stagingButton" class="shark-button"></div>
+      <div id="prodButton" class="shark-button"></div>
+    </div>
+    <div id="loading-cover" style="display:none;">
+      <div id="unity-loading-bar">
+        <div id="unity-logo"><img src="logo.png"></div>
+        <div id="unity-progress-bar-empty" style="display: none;">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <div id="unity-fullscreen-button" style="display: none;"></div>
+    <script>
+      const hideFullScreenButton = "";
+      const buildUrl = "Prod/Build";
+      const loaderUrl = buildUrl + "/webgl-player.loader.js";
+      const config = {
+        dataUrl: buildUrl + "/webgl-player.data",
+        frameworkUrl: buildUrl + "/webgl-player.framework.js",
+        codeUrl: buildUrl + "/webgl-player.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Sharks Interactive",
+        productName: "Durus",
+        productVersion: "0.1.0",
+      };
+
+      const stagingBuildUrl = "Staging/Build";
+      const stagingloaderUrl = stagingBuildUrl + "/webgl-player.loader.js";
+      const stagingconfig = {
+        dataUrl: stagingBuildUrl + "/webgl-player.data",
+        frameworkUrl: stagingBuildUrl + "/webgl-player.framework.js",
+        codeUrl: stagingBuildUrl + "/webgl-player.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Sharks Interactive",
+        productName: "Durus - Staging",
+        productVersion: "0.2.0",
+      };
+
+      const container = document.querySelector("#unity-container");
+      const canvas = document.querySelector("#unity-canvas");
+      const loadingCover = document.querySelector("#loading-cover");
+      const selectionCover = document.querySelector(".selectionCover");
+      const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+      const progressBarFull = document.querySelector("#unity-progress-bar-full");
+      const fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      const spinner = document.querySelector('.spinner');
+
+      const stagingButton = document.querySelector('#stagingButton');
+      const prodButton = document.querySelector('#prodButton');
+
+      const canFullscreen = (function() {
+        for (const key of [
+            'exitFullscreen',
+            'webkitExitFullscreen',
+            'webkitCancelFullScreen',
+            'mozCancelFullScreen',
+            'msExitFullscreen',
+          ]) {
+          if (key in document) {
+            return true;
+          }
+        }
+        return false;
+      }());
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        container.className = "unity-mobile";
+        config.devicePixelRatio = 1;
+      }
+
+      prodButton.onclick = () => {
+      selectionCover.style.display = "none";
+      loadingCover.style.display = "";
+
+
+      const script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarEmpty.style.display = "";
+          progressBarFull.style.width = `${100 * progress}%`;
+        }).then((unityInstance) => {
+          loadingCover.style.display = "none";
+          if (canFullscreen) {
+            if (!hideFullScreenButton) {
+              fullscreenButton.style.display = "";
+            }
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          }
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    };
+
+    stagingButton.onclick = () => {
+      selectionCover.style.display = "none";
+      loadingCover.style.display = "";
+
+
+      const script = document.createElement("script");
+      script.src = stagingloaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, stagingconfig, (progress) => {
+          progressBarEmpty.style.display = "";
+          progressBarFull.style.width = `${100 * progress}%`;
+        }).then((unityInstance) => {
+          loadingCover.style.display = "none";
+          if (canFullscreen) {
+            if (!hideFullScreenButton) {
+              fullscreenButton.style.display = "";
+            }
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          }
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    };
+    </script>
+  </body>
+</html>
