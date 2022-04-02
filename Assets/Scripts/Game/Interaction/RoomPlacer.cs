@@ -4,19 +4,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class RoomPlacer : SharksBehaviour
+namespace Chrio.World
 {
-    public GameObject ghost;
-
-    // Start is called before the first frame update
-    void Start()
+    public class RoomPlacer : SharksBehaviour
     {
-        
-    }
+        public GameObject Ghost;
 
-    // Update is called once per frame
-    void Update()
-    {
-        ghost.transform.position = GlobalState.Game.GridManager.GridPosition;
+        // Start is called before the first frame update
+        void Start()
+        {
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            Ghost.SetActive(GlobalState.Game.Construction.Placing == Game_State.Construction.PlacingType.None);
+
+            switch (GlobalState.Game.Construction.Placing)
+            {
+                case Game_State.Construction.PlacingType.Power:
+                    Ghost.transform.position = GlobalState.Game.GridManager.GridPosition;
+                    break;
+
+                default:
+                    return;
+            }
+        }
     }
 }
