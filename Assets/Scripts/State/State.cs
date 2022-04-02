@@ -5,6 +5,7 @@ using Chrio.Entities;
 using Chrio.World.Loading;
 using Chrio.Controls;
 using Chrio.Effects;
+using System;
 
 namespace Chrio.World
 {
@@ -35,19 +36,58 @@ namespace Chrio.World
             }
         }
 
+        public class Construction
+        {
+            public enum PlacingType
+            {
+                None,
+                Power,
+                Water,
+                Defense,
+                Bunks
+            }
+
+            public PlacingType Placing;
+            public Dictionary<Guid, BaseRoom> Rooms = new Dictionary<Guid, BaseRoom>();
+
+            /// <summary>
+            /// Checks if a square is free (This is really slow)
+            /// </summary>
+            /// <param name="Position"> The position to check if it's square is occupied </param>
+            /// <returns> Is the square free? </returns>
+            public bool GetSquareIsFree(Vector3 Position)
+            {
+                foreach (BaseRoom room in Rooms.Values) if (room.transform.position == Position) return true;
+                return false;
+            }
+
+            public (Guid, BaseRoom) AddRoom(State GlobalState, GameObject Room)
+            {
+                BaseRoom _room = Room.GetComponent<BaseRoom>();
+                _room.OnLoad(GlobalState, () => { });
+
+                Guid _id = Guid.NewGuid();
+                Rooms.Add(_id, _room);
+
+                return (_id, _room);
+            }
+        }
+
         public class Game
         {
             public bool Running;
             public Camera MainCamera;
             public CameraShake Shake;
             public Chrio.Player.Player Player;
-
+            public GridManager GridManager;
 
             public Entities Entities;
+            public Construction Construction;
 
             public Game()
             {
                 Entities = new Entities();
+                Construction = new Construction();
 
                 Running = true;
                 MainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
