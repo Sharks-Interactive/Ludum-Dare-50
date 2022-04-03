@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Worker : MonoBehaviour
+namespace Chrio.Entities
 {
-    public void SendToGrid() { }
+    public class Worker : SharksBehaviour
+    {
+        public void SendToGrid() { }
+    }
 }

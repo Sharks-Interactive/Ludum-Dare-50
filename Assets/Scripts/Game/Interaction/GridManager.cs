@@ -40,5 +40,21 @@ namespace Chrio
                 );
             }
         }
+
+        public Vector2 GridSquareForPosition(Vector2 Position) => new Vector2(
+            Mathf.Round(Position.x / GridSize.x),
+            Mathf.Round(Position.y / GridSize.y)
+        );
+
+        /// <summary>
+        /// Returns the worldposition of the center of a given gridsquare
+        /// </summary>
+        /// <param name="GridSquare"> Which square are we taling about</param>
+        /// <returns> World position of the center of the requested grid square </returns>
+        public Vector3 GridPositionForSquare(Vector2 GridSquare) => new Vector3(
+            GridSquare.x * GridSize.x,
+            GridSquare.y * GridSize.y,
+            0
+        );
     }
 }

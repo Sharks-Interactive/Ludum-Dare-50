@@ -26,9 +26,11 @@ namespace Chrio.UI
 
             ResourceManager.Resources _resourceDifference = GlobalState.Game.ResourceManager.GlobalResources - _lastResources;
             _lastResources = GlobalState.Game.ResourceManager.GlobalResources;
-            _resourceText.text = $"Power: {_lastResources.Power} ({_resourceDifference.Power})";
+            _resourceText.text = $"Power: {_lastResources.Power} ({GetNumberSign(_resourceDifference.Power)}{_resourceDifference.Power})";
 
             StartCoroutine(CalculateResourceChanges());
         }
+
+        private string GetNumberSign(float Num) => (Num > 0 ? "+" : "-");
     }
 }
