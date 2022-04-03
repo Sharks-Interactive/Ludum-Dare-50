@@ -15,12 +15,14 @@ namespace Chrio.Entities
         protected virtual string EntityType { get => "BaseEntity"; }
 
         protected SpriteRenderer spriteRenderer;
+        protected bool loaded = false;
 
         public override void OnLoad(Game_State.State _gameState, ILoadableObject.CallBack _callback)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
 
             base.OnLoad(_gameState, _callback);
+            loaded = true;
         }
 
         public virtual void OnSelected() 

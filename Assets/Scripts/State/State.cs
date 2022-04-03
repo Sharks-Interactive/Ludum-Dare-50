@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using Chrio.Entities;
 using Chrio.World.Loading;
 using Chrio.Controls;
+using Chrio.UI;
 using Chrio.Effects;
 using System;
 
@@ -36,19 +37,26 @@ namespace Chrio.World
             }
         }
 
+        public class Workers
+        {
+            public List<Worker> VaultWorkers;
+
+            public Workers()
+            {
+                VaultWorkers = new();
+            }
+        }
+
         public class Construction
         {
-            public enum PlacingType
-            {
-                None,
-                Power,
-                Water,
-                Defense,
-                Bunks
-            }
-
-            public PlacingType Placing;
+            public RoomType Placing;
+            public RoomData PlacingData;
             public Dictionary<Guid, BaseRoom> Rooms = new Dictionary<Guid, BaseRoom>();
+
+            public Construction()
+            {
+                Placing = RoomType.None;
+            }
 
             /// <summary>
             /// Checks if a square is free (This is really slow)
@@ -60,10 +68,11 @@ namespace Chrio.World
                 foreach (BaseRoom room in Rooms.Values) if (room.transform.position == Position) return true;
                 return false;
             }
-
+                
             public (Guid, BaseRoom) AddRoom(State GlobalState, GameObject Room)
             {
                 BaseRoom _room = Room.GetComponent<BaseRoom>();
+                _room.RoomData = PlacingData;
                 _room.OnLoad(GlobalState, () => { });
 
                 Guid _id = Guid.NewGuid();
@@ -78,16 +87,21 @@ namespace Chrio.World
             public bool Running;
             public Camera MainCamera;
             public CameraShake Shake;
-            public Chrio.Player.Player Player;
+            public Player.Player Player;
             public GridManager GridManager;
+            public TooltipManager Tooltip;
 
             public Entities Entities;
             public Construction Construction;
+            public ResourceManager ResourceManager;
+            public Workers Workers;
 
-            public Game()
+            public Game(State state)
             {
                 Entities = new Entities();
+                Workers = new Workers();
                 Construction = new Construction();
+                ResourceManager = new ResourceManager(state);
 
                 Running = true;
                 MainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -152,7 +166,7 @@ namespace Chrio.World
             public State()
             {
                 Controls = new Controls(this);
-                Game = new Game();
+                Game = new Game(this);
 
                 LowQuality = PlayerPrefs.GetInt("LQ", 0) != 0;
             }

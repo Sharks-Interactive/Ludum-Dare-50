@@ -1,7 +1,5 @@
-using Chrio;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Chrio.Entities;
 using UnityEngine.InputSystem;
 
 namespace Chrio.World
@@ -10,25 +8,31 @@ namespace Chrio.World
     {
         public GameObject Ghost;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
         void Update()
         {
-            Ghost.SetActive(GlobalState.Game.Construction.Placing == Game_State.Construction.PlacingType.None);
+            Ghost.SetActive(GlobalState.Game.Construction.Placing != RoomType.None);
 
             switch (GlobalState.Game.Construction.Placing)
             {
-                case Game_State.Construction.PlacingType.Power:
+                case RoomType.Power:
                     Ghost.transform.position = GlobalState.Game.GridManager.GridPosition;
                     break;
 
                 default:
                     return;
+            }
+
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                GlobalState.Game.Construction.AddRoom(
+                    GlobalState, 
+                    Instantiate(
+                        Resources.Load<GameObject>($"Rooms/{GlobalState.Game.Construction.Placing} Room"),
+                        Ghost.transform.position, 
+                        Quaternion.identity, 
+                        transform
+                ));
+                GlobalState.Game.Construction.Placing = RoomType.None;
             }
         }
     }
