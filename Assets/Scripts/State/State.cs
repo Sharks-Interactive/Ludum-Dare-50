@@ -4,9 +4,7 @@ using UnityEngine.InputSystem;
 using Chrio.Entities;
 using Chrio.World.Loading;
 using Chrio.Controls;
-using Chrio.UI;
 using Chrio.Effects;
-using System;
 
 namespace Chrio.World
 {
@@ -37,77 +35,19 @@ namespace Chrio.World
             }
         }
 
-        public class Workers
-        {
-            public List<Worker> VaultWorkers;
-
-            public Workers()
-            {
-                VaultWorkers = new();
-            }
-
-            public void AddWorker(State State, Worker Worker)
-            {
-                VaultWorkers.Add(Worker);
-                State.Game.ResourceManager.GlobalResources.Citizens++;
-            }
-        }
-
-        public class Construction
-        {
-            public RoomType Placing;
-            public RoomData PlacingData;
-            public Dictionary<Guid, BaseRoom> Rooms = new Dictionary<Guid, BaseRoom>();
-
-            public Construction()
-            {
-                Placing = RoomType.None;
-            }
-
-            /// <summary>
-            /// Checks if a square is free (This is really slow)
-            /// </summary>
-            /// <param name="Position"> The position to check if it's square is occupied </param>
-            /// <returns> Is the square free? </returns>
-            public bool GetSquareIsFree(Vector3 Position)
-            {
-                foreach (BaseRoom room in Rooms.Values) if (room.transform.position == Position) return true;
-                return false;
-            }
-                
-            public (Guid, BaseRoom) AddRoom(State GlobalState, GameObject Room)
-            {
-                BaseRoom _room = Room.GetComponent<BaseRoom>();
-                _room.RoomData = PlacingData;
-                _room.OnLoad(GlobalState, () => { });
-
-                Guid _id = Guid.NewGuid();
-                Rooms.Add(_id, _room);
-
-                return (_id, _room);
-            }
-        }
-
         public class Game
         {
             public bool Running;
             public Camera MainCamera;
             public CameraShake Shake;
-            public Player.Player Player;
-            public GridManager GridManager;
-            public TooltipManager Tooltip;
+            public Chrio.Player.Player Player;
+
 
             public Entities Entities;
-            public Construction Construction;
-            public ResourceManager ResourceManager;
-            public Workers Workers;
 
-            public Game(State state)
+            public Game()
             {
                 Entities = new Entities();
-                Workers = new Workers();
-                Construction = new Construction();
-                ResourceManager = new ResourceManager(state);
 
                 Running = true;
                 MainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -172,7 +112,7 @@ namespace Chrio.World
             public State()
             {
                 Controls = new Controls(this);
-                Game = new Game(this);
+                Game = new Game();
 
                 LowQuality = PlayerPrefs.GetInt("LQ", 0) != 0;
             }

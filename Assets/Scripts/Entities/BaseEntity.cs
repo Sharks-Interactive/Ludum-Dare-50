@@ -10,19 +10,16 @@ namespace Chrio.Entities
     /// </summary>
     public class BaseEntity : SharksBehaviour, IBaseEntity
     {
-        public virtual EntityData EntityData { get => _data; set => _data = value; }
-        private EntityData _data;
-        protected virtual string EntityType { get => "BaseEntity"; }
+        public EntityData EntityData;
+        protected string EntityType { get => "BaseEntity"; }
 
         protected SpriteRenderer spriteRenderer;
-        protected bool loaded = false;
 
         public override void OnLoad(Game_State.State _gameState, ILoadableObject.CallBack _callback)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
 
             base.OnLoad(_gameState, _callback);
-            loaded = true;
         }
 
         public virtual void OnSelected() 
