@@ -4959,7 +4959,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6671166497876887253}
   - component: {fileID: 6671166497876887254}
-  - component: {fileID: 6671166497876887255}
+  - component: {fileID: 5268810197194577447}
   m_Layer: 0
   m_Name: Power Room
   m_TagString: Untagged
@@ -5039,7 +5039,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6671166497876887255
+--- !u!114 &5268810197194577447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5048,10 +5048,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6671166497876887252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 867318c15aba01349829242013773688, type: 3}
+  m_Script: {fileID: 11500000, guid: 220553456a3c25e48a5a2b5fb28628e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomData: {fileID: 0}
+  RoomData: {fileID: 11400000, guid: 8305e56a437b1b040ac7cf734652f73e, type: 2}
   Workers: 0
 --- !u!1 &6671166498223702439
 GameObject:

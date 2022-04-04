@@ -26,7 +26,7 @@ namespace Chrio.UI
 
             ResourceManager.Resources _resourceDifference = GlobalState.Game.ResourceManager.GlobalResources - _lastResources;
             _lastResources = GlobalState.Game.ResourceManager.GlobalResources;
-            _resourceText.text = $"Power: {_lastResources.Power} ({GetNumberSign(_resourceDifference.Power)}{_resourceDifference.Power})";
+            _resourceText.text = $"Power: {_lastResources.Power} ({GetNumberSign(_resourceDifference.Power)}{_resourceDifference.Power})   Free Workers: {_lastResources.Citizens} ({GetNumberSign(_resourceDifference.Citizens)}{_resourceDifference.Citizens})";
 
             StartCoroutine(CalculateResourceChanges());
         }

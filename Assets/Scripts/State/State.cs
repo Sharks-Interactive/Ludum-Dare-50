@@ -45,6 +45,12 @@ namespace Chrio.World
             {
                 VaultWorkers = new();
             }
+
+            public void AddWorker(State State, Worker Worker)
+            {
+                VaultWorkers.Add(Worker);
+                State.Game.ResourceManager.GlobalResources.Citizens++;
+            }
         }
 
         public class Construction

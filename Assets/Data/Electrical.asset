@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Electrical
   ShortDescription: Room that generates power for your shelter
-  BuildPicture: {fileID: 21300000, guid: 6a7ac9e8c26b12440bf2b1da2ca97794, type: 3}
+  BuildPicture: {fileID: -1204787581, guid: 7accd261b582a1543a8fdbba4c9f9131, type: 3}
   RoomType: 1
   Power: 5
   Water: 0
-  CitizensRequirement: 0
+  CitizensRequirement: 2

@@ -1,6 +1,8 @@
 using Chrio.Entities;
 using Chrio.World;
 using System.Collections.Generic;
+using SharkUtils;
+using UnityEngine;
 
 namespace Chrio
 {
@@ -10,13 +12,15 @@ namespace Chrio
         {
             public float Power;
             public float Water;
-            public float Citizens;
+            public int Citizens;
 
             public static Resources operator -(Resources a, Resources b) => new Resources() { Power = a.Power - b.Power, Water = a.Water - b.Water, Citizens = a.Citizens - b.Citizens };
         }
 
         public Resources GlobalResources;
         private Game_State.State GlobalState;
+        private Resources _lastResources;
+        private int _lastRooms;
 
         public ResourceManager(Game_State.State _state)
         {
@@ -32,8 +36,24 @@ namespace Chrio
                 GlobalResources.Power += room.GetPower();
                 GlobalResources.Water += room.GetWater();
 
-                for (int i = 0; i < GlobalResources.Citizens / GlobalState.Game.Construction.Rooms.Count; i++) _workers.Pop().SendToGrid();
+                if (NeedWorkersRecalc)
+                {
+                    room.UnallocateAllWorkers();
+                    // Change in the number of workers or rooms
+                    int _numOfWorkers = (GlobalResources.Citizens < room.GetWorkersRequest() ? GlobalResources.Citizens : room.GetWorkersRequest());
+                    for (int i = 0; i < _numOfWorkers; i++)
+                    {
+                        _workers.Pop().SendToSquare(GlobalState.Game.GridManager.GridSquareForPosition(room.transform.position));
+                        room.AllocateWorkers(1);
+                        GlobalResources.Citizens -= 1;
+                    }
+                }
             }
+
+            _lastResources = GlobalResources;
+            _lastRooms = GlobalState.Game.Construction.Rooms.Count;
         }
+
+        private bool NeedWorkersRecalc { get => _lastResources.Citizens != GlobalResources.Citizens || _lastRooms != GlobalState.Game.Construction.Rooms.Count;  }
     }
 }

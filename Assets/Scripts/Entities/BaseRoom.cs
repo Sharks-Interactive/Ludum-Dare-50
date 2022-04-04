@@ -16,6 +16,8 @@ namespace Chrio.Entities
 
         public virtual void RetrieveWorkers(int Workers) { this.Workers -= Workers; }
 
+        public virtual void UnallocateAllWorkers() { this.Workers = 0; }
+
         public virtual int GetWorkersRequest() => RoomData.CitizensRequirement;
 
         public virtual void OnPlace() { }

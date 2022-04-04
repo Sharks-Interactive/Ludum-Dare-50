@@ -8,7 +8,7 @@ namespace Chrio.Entities
     {
         public override float GetPower()
         {
-            return RoomData.Power / (RoomData.CitizensRequirement - Workers); // Reduce efficiency if we don't have 100% worker assignment
+            return RoomData.Power * ((float)Workers / RoomData.CitizensRequirement); // Reduce efficiency if we don't have 100% worker assignment
         }
     }
 }
